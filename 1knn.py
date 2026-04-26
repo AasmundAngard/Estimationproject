@@ -43,4 +43,7 @@ distances = np.linalg.norm(features - test_features, axis=1)
 idx = np.argpartition(distances, k)[:k]
 
 print("true label:", test_label)
+
+print("guess:", labels[idx])
+
 print("guess:", labels[idx])
