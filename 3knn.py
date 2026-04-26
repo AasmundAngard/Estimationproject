@@ -88,6 +88,7 @@ cols = [
     # "mfcc_1_mean",
     # "tempo"
 ]
+# beste: rmse_var mfcc_5_std
 
 # Follows same order as datatypes, but shows correctpercentage
 correctpercentage = np.zeros(0)
@@ -125,11 +126,9 @@ for feature1 in datatypes:
             else:
                 wrong_guess += 1
 
-        print("right guess:",right_guess)
-        print("wrong guess:",wrong_guess)
         percentage = right_guess/(right_guess+wrong_guess)
         correctpercentage = np.append(correctpercentage,percentage)
-        print(percentage)
+        print(feature1,feature2,percentage)
 
 
 best_index1 = np.argmax(correctpercentage) // len(datatypes)
@@ -138,5 +137,7 @@ best_index2 = np.argmax(correctpercentage) % len(datatypes)
 best_type1 = datatypes[best_index1]
 best_type2 = datatypes[best_index2]
 print("beste type1,2:",best_type1,best_type2,correctpercentage[best_index1*len(datatypes)+best_index2])
+
+# Beste med spectrall_rolloff_mean+spectral_centroid_mean: rmse_var mfcc_5_std
 
 
