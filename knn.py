@@ -35,7 +35,11 @@ test_index = 100
 test_features = features[test_index]
 test_label = labels[test_index]
 
+features = np.delete(features, (test_index), axis=0)
+labels = np.delete(labels, (test_index), axis=0)
+
 distances = np.linalg.norm(features - test_features, axis=1)
+
 idx = np.argpartition(distances, k)[:k]
 
 print("true label:", test_label)
