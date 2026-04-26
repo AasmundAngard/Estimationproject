@@ -138,6 +138,6 @@ best_type1 = datatypes[best_index1]
 best_type2 = datatypes[best_index2]
 print("beste type1,2:",best_type1,best_type2,correctpercentage[best_index1*len(datatypes)+best_index2])
 
-# Beste med spectrall_rolloff_mean+spectral_centroid_mean: rmse_var mfcc_5_std
+# Beste var 53.03% med spectrall_rolloff_mean + spectral_centroid_mean  og  rmse_var + mfcc_5_std 
 
 
