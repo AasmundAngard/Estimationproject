@@ -14,6 +14,8 @@ git pull - henter endringer fra github for branchen du er i nå
 
 git merge navnpåbranch - henter endringer fra din lokale navnpåbranch til branchen du er i nå. Kan trigge en konflikt du må løse opp i.
 
+Om du får opp et rart vindu i terminalen om commit/merge message: Bare bruk git-extensionen, og etterpå skriv: :qa i vinduet og trykk enter for å fjerne det.
+
 ### Hvordan legge til egne endringer
 1. Gjør endringer/skriv noe i din egen branch.
 2. Når du er fornøyd, skriv en commit-kommentar og trykk commit i git-extensionen (den med grenene).
