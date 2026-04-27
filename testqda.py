@@ -14,7 +14,7 @@ from collections import Counter
 def mahalanobis(means,covar,labels,test_features):
     # Mahalanobis-avstand:
     # D = sqrt( (x-mu).T dot C^-1 dot (cx-mu))
-    D = [np.sqrt(np.dot(np.dot((test_features-means[g]).T,np.linalg.inv(covar[g])),(test_features-means[g])) ) for g in range(len(labels))]
+    D = [np.log(np.linalg.det(covar[g])) + np.dot(np.dot((test_features-means[g]).T,np.linalg.inv(covar[g])),(test_features-means[g]))  for g in range(len(labels))]
 
     closest_label_index = np.argmin(D)
     guess = labels[closest_label_index]
