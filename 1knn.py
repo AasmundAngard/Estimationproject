@@ -18,21 +18,20 @@ cols = [
     "mfcc_1_mean",
     "spectral_centroid_mean",
     "tempo",
-    "Genre"
+    "Genre",
+    "Type"
 ]
 
 df = pd.read_csv("Music files/GenreClassData_30s.txt", sep="\t", usecols=cols)
-features = df.drop(columns=["Genre"]).values
-labels = df["Genre"].values
-train_features = features[:794]
-train_labels = labels[:794]
+train_features = df[df["Type"]=="Train"].drop(columns=["Genre","Type"]).values
+test_features = df[df["Type"]=="Test"].drop(columns=["Genre","Type"]).values
+train_labels = df[df["Type"]=="Train"]["Genre"].values
+test_labels = df[df["Type"]=="Test"]["Genre"].values
 
-test_features_all = features[794:]
-test_labels_all = labels[794:]
 
-scaler = StandardScaler()
-train_features = scaler.fit_transform(train_features)
-test_features_all = scaler.transform(test_features_all)
+# scaler = StandardScaler()
+# train_features = scaler.fit_transform(train_features)
+# test_features = scaler.transform(test_features)
 
 # test_index = 35
 # test_features = features[test_index]
@@ -42,18 +41,25 @@ test_features_all = scaler.transform(test_features_all)
 # labels = np.delete(labels, (test_index), axis=0)
 
 correctly_classified = 0
-i = 0
 
-for test_feature in test_features_all:
-    true_label = test_labels_all[i]
+
+for i in range(len(test_features)):
+    true_label = test_labels[i]
+    test_feature = test_features[i]
+
+    # Beregner avstand fra testpunkt til alle andre punkter
     distances = np.linalg.norm(train_features - test_feature, axis=1)
-    idx = np.argpartition(distances, k)[:k]
-    nearest_labels = train_labels[idx]
-    nearest_distances = distances[idx]
+
+    # Legger indexene til de k punktene med kortest avstand først i arrayet, og henter dem ut
+    idx_of_nearest_points = np.argpartition(distances, k)[:k]
+
+    nearest_labels = train_labels[idx_of_nearest_points]
+    nearest_distances = distances[idx_of_nearest_points]
 
     counts = Counter(nearest_labels)
     max_count = max(counts.values())
 
+    # Labels som har flest punkter blant k nærmeste
     candidates = [label for label, count in counts.items() if count == max_count]
 
     if len(candidates) == 1:
@@ -68,8 +74,6 @@ for test_feature in test_features_all:
     if majority_class == true_label:
         correctly_classified += 1
 
-    i += 1
 
-
-treff_forhold = correctly_classified / len(test_features_all)
+treff_forhold = correctly_classified / len(test_features)
 print(f"Treffprosent: {100*treff_forhold:.2f}%")
