@@ -23,23 +23,23 @@ cols = [
 ]
 
 df = pd.read_csv("Music files/GenreClassData_30s.txt", sep="\t", usecols=cols)
+
 train_features = df[df["Type"]=="Train"].drop(columns=["Genre","Type"]).values
 test_features = df[df["Type"]=="Test"].drop(columns=["Genre","Type"]).values
 train_labels = df[df["Type"]=="Train"]["Genre"].values
 test_labels = df[df["Type"]=="Test"]["Genre"].values
+
+genres = np.unique(train_labels)
+
 
 
 # scaler = StandardScaler()
 # train_features = scaler.fit_transform(train_features)
 # test_features = scaler.transform(test_features)
 
-# test_index = 35
-# test_features = features[test_index]
-# test_label = labels[test_index]
 
-# features = np.delete(features, (test_index), axis=0)
-# labels = np.delete(labels, (test_index), axis=0)
-
+correct_per_genre = {g: 0 for g in genres}
+total_per_genre = {g: 0 for g in genres}
 correctly_classified = 0
 
 
@@ -73,7 +73,21 @@ for i in range(len(test_features)):
 
     if majority_class == true_label:
         correctly_classified += 1
+        correct_per_genre[true_label] += 1
+
+    total_per_genre[true_label] += 1
+
+
 
 
 treff_forhold = correctly_classified / len(test_features)
-print(f"Treffprosent: {100*treff_forhold:.2f}%")
+print(f"Treffprosent totalt: {100*treff_forhold:.2f}%")
+
+
+print("\nTreffprosent per sjanger:")
+
+for g in genres:
+    if total_per_genre[g] > 0:
+        acc = correct_per_genre[g] / total_per_genre[g]
+        print(f"{g}: {100*acc:.2f}% ({correct_per_genre[g]}/{total_per_genre[g]})")
+
