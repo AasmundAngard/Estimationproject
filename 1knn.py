@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from collections import Counter
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
+from datautilities import readfromtabcsv
 
 
 # kNN-modell, k = 5
@@ -25,13 +26,7 @@ cols = [
     "Type"
 ]
 
-df = pd.read_csv("Music files/GenreClassData_30s.txt", sep="\t", usecols=cols)
-
-train_features = df[df["Type"]=="Train"].drop(columns=["Genre","Type"]).values
-train_labels = df[df["Type"]=="Train"]["Genre"].values
-
-test_features = df[df["Type"]=="Test"].drop(columns=["Genre","Type"]).values
-test_labels = df[df["Type"]=="Test"]["Genre"].values
+train_features,train_labels,test_features,test_labels = readfromtabcsv("Music files/GenreClassData_30s.txt",cols)
 
 genres = np.unique(train_labels)
 
