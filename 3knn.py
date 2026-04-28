@@ -51,7 +51,6 @@ def find_nearest(model_features,model_labels,test_features,normalize_mean,normal
 # Totalt 990 datapunkter
 # 792 samples for modell
 # 990 - 792 = 198 samples for testing
-model_datapoints = 792
 
 
 # Modellen skal trenes på 4 parametre, der minst 3 er en av:
@@ -82,13 +81,45 @@ datatypes = ['zero_cross_rate_mean', 'zero_cross_rate_std', 'rmse_mean',
               'mfcc_11_std', 'mfcc_12_std'
               ]
 
+colsfork5 = [
+    "mfcc_1_mean",
+     "spectral_contrast_mean",
+     "mfcc_5_std",
+     "chroma_stft_9_mean",
+     "rmse_mean",
+     "rmse_var",
+     "spectral_centroid_mean",
+     "mfcc_6_mean",
+     "spectral_contrast_var",
+]
+# Gir 72.22% riktig
+colsfork7 = [
+     "spectral_flatness_var",
+     "spectral_contrast_var",
+     "mfcc_8_std",
+     "rmse_var",
+     "chroma_stft_4_mean",
+     "spectral_bandwidth_mean",
+     "mfcc_5_std",
+     "spectral_flatness_mean",
+     "spectral_rolloff_mean",
+     "spectral_contrast_mean",
+     "mfcc_3_std",
+     "rmse_mean",
+     "mfcc_6_mean",
+     "spectral_rolloff_var",
+     "spectral_flatness_var",
+     "mfcc_2_mean",
+     "spectral_contrast_var",
+]
 cols = [
     "spectral_rolloff_mean",
     "spectral_centroid_mean",
     "mfcc_1_mean",
     # "tempo"
+     "rmse_var",
 ]
-# beste: rmse_var mfcc_5_std
+cols = cols
 
 # Follows same order as datatypes, but shows correctpercentage
 correctpercentage = np.zeros(0)
@@ -99,16 +130,15 @@ df = pd.read_csv("Music files/GenreClassData_30s.txt", sep="\t")
 labels = df["Genre"].values
 
 for feature1 in datatypes:
-    # for feature2 in datatypes:
-        # features = df[cols+[feature1,feature2]].values
-        features = df[cols+[feature1]].values
 
-        model_features = features[:model_datapoints]
-        model_labels = labels[:model_datapoints]
+        # model_features = df[df["Type"]=="Train"][cols+[feature1]].values
+        # test_features = df[df["Type"]=="Train"][cols+[feature1]].values
 
-        test_features = features[model_datapoints:]
-        test_labels = labels[model_datapoints:]
+        model_features = df[df["Type"]=="Train"][cols].values
+        model_labels = df[df["Type"]=="Train"]["Genre"].values        
 
+        test_features = df[df["Type"]=="Test"][cols].values
+        test_labels = df[df["Type"]=="Test"]["Genre"].values
 
         # Normaliser aksene til mu=0, std=1
         model_means = np.mean(model_features, axis=0)
