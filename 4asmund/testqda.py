@@ -62,7 +62,7 @@ cols = [
 # cols = datatypes
 
 
-df = pd.read_csv("Music files/GenreClassData_5s.txt", usecols=cols+["Genre","Type"], sep="\t")
+df = pd.read_csv("Music files/GenreClassData_30s.txt", usecols=cols+["Genre","Type"], sep="\t")
 labels = df["Genre"].values
 genres = list(set(labels))
 
