@@ -85,7 +85,7 @@ datatypes = ['zero_cross_rate_mean', 'zero_cross_rate_std', 'rmse_mean',
 cols = [
     "spectral_rolloff_mean",
     "spectral_centroid_mean",
-    # "mfcc_1_mean",
+    "mfcc_1_mean",
     # "tempo"
 ]
 # beste: rmse_var mfcc_5_std
@@ -99,8 +99,9 @@ df = pd.read_csv("Music files/GenreClassData_30s.txt", sep="\t")
 labels = df["Genre"].values
 
 for feature1 in datatypes:
-    for feature2 in datatypes:
-        features = df[cols+[feature1,feature2]].values
+    # for feature2 in datatypes:
+        # features = df[cols+[feature1,feature2]].values
+        features = df[cols+[feature1]].values
 
         model_features = features[:model_datapoints]
         model_labels = labels[:model_datapoints]
@@ -114,6 +115,8 @@ for feature1 in datatypes:
         model_stds = np.sqrt(np.var(model_features, axis=0))
         model_features -= model_means
         model_features /= model_stds
+        # model_means = 1
+        # model_stds = 1
 
         right_guess = 0
         wrong_guess = 0
@@ -128,16 +131,19 @@ for feature1 in datatypes:
 
         percentage = right_guess/(right_guess+wrong_guess)
         correctpercentage = np.append(correctpercentage,percentage)
-        print(feature1,feature2,percentage)
+        # print(feature1,feature2,percentage)
+        print(feature1,percentage)
 
 
-best_index1 = np.argmax(correctpercentage) // len(datatypes)
-best_index2 = np.argmax(correctpercentage) % len(datatypes)
-
-best_type1 = datatypes[best_index1]
-best_type2 = datatypes[best_index2]
-print("beste type1,2:",best_type1,best_type2,correctpercentage[best_index1*len(datatypes)+best_index2])
-
-# Beste var 53.03% med spectrall_rolloff_mean + spectral_centroid_mean  og  rmse_var + mfcc_5_std 
+best_index = np.argmax(correctpercentage)
 
 
+print("Beste:",datatypes[best_index],correctpercentage[best_index])
+# Beste var 53.03% med spectrall_rolloff_mean + spectral_centroid_mean  og  rmse_var + mfcc_5_std med normalisering
+
+# best_index1 = best_index // len(datatypes)
+# best_index2 = best_index % len(datatypes)
+
+# best_type1 = datatypes[best_index1]
+# best_type2 = datatypes[best_index2]
+# print("beste type1,2:",best_type1,best_type2,correctpercentage[best_index1*len(datatypes)+best_index2])

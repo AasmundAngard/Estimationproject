@@ -19,7 +19,8 @@ cols = [
     "mfcc_1_mean",
     "spectral_centroid_mean",
     "tempo",
-    # "rmse_var",
+    # "spectral_rolloff_var", # Det beste for å bytte ut tempo
+    # "rmse_var", # Det beste istedenfor tempo om akser normaliseres
     "Genre",
     "Type"
 ]
@@ -94,9 +95,9 @@ disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
                             display_labels=genres,
                             # cmap=plt.cm.Blues
                             )
-
+# disp.plot()
 disp.plot(cmap="Blues")
 plt.xticks(rotation=45, ha="right")  # rotate x-axis labels
 plt.title("Confusion matrix kNN classification, k=5")
 plt.tight_layout()
-plt.savefig("plots/1knnconfusion")
+plt.savefig("plots/testknnconfusion")
