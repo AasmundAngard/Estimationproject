@@ -168,4 +168,5 @@ formatted_list = [
     str(feature)+"_"+str(col) for feature, col in best_columns.items()
 ]
 print(formatted_list)
+print([feature for feature,_ in best_columns.items()])
 

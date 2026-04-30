@@ -93,7 +93,7 @@ cols = [datatype +"_"+ suffix for datatype in datatypes for suffix in lengths]
 #         'spectral_flatness_mean_10_3', 'mfcc_6_mean_5_3']
 # With top 20 variance scores
 # cols = ['mfcc_1_mean_10_2', 'spectral_bandwidth_mean_30', 'spectral_centroid_var_30', 'spectral_rolloff_mean_30', 'spectral_centroid_mean_30', 'zero_cross_rate_std_30', 'mfcc_4_mean_30', 'rmse_var_5_4', 'mfcc_2_mean_30', 'spectral_flatness_var_30', 'spectral_rolloff_var_5_2', 'rmse_mean_10_3', 'spectral_contrast_var_30', 'chroma_stft_2_mean_30', 'chroma_stft_7_mean_30', 'chroma_stft_9_mean_30', 'mfcc_8_mean_30', 'mfcc_6_mean_30', 'chroma_stft_5_mean_30', 'spectral_flatness_mean_10_3', 'mfcc_4_std_5_2', 'mfcc_5_std_5_2', 'mfcc_6_std_5_5', 'spectral_contrast_mean_10_1', 'mfcc_9_mean_10_2', 'mfcc_7_std_5_2']
-# With top 30
+# With top 30 variance scores
 # cols = ['mfcc_1_mean_10_2', 'spectral_bandwidth_mean_30', 'spectral_centroid_var_30', 'spectral_rolloff_mean_30', 'spectral_centroid_mean_30', 'zero_cross_rate_std_30', 'mfcc_4_mean_30', 'rmse_var_5_4', 'mfcc_2_mean_30', 'spectral_flatness_var_30', 'spectral_rolloff_var_5_2', 'rmse_mean_10_3', 'spectral_contrast_var_30', 'chroma_stft_2_mean_30', 'chroma_stft_7_mean_30', 'chroma_stft_9_mean_30', 'mfcc_8_mean_30', 'mfcc_6_mean_30', 'chroma_stft_5_mean_30', 'spectral_flatness_mean_10_3', 'chroma_stft_4_mean_30', 'chroma_stft_12_mean_30', 'mfcc_6_std_5_5', 'mfcc_5_std_5_2', 'spectral_contrast_mean_30', 'mfcc_4_std_5_2', 'mfcc_9_mean_30', 'zero_cross_rate_mean_30', 'mfcc_7_std_10_1', 'mfcc_12_mean_30', 'mfcc_7_mean_5_4', 'spectral_bandwidth_var_5_2', 'mfcc_3_std_5_6', 'mfcc_3_mean_5_2']
 
 # Follows same order as datatypes, but shows correctpercentage

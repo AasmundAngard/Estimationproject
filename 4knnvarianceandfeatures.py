@@ -86,6 +86,15 @@ cols = [
      "rmse_var",
 ]
 
+# Features variance N=30, 34 features
+cols = ['mfcc_1_mean', 'spectral_bandwidth_mean', 'spectral_centroid_var', 'spectral_rolloff_mean', 'spectral_centroid_mean', 'zero_cross_rate_std', 'mfcc_4_mean', 'rmse_var', 'mfcc_2_mean', 'spectral_flatness_var', 'spectral_rolloff_var', 'rmse_mean', 'spectral_contrast_var', 'chroma_stft_2_mean', 'chroma_stft_7_mean', 'chroma_stft_9_mean', 'mfcc_8_mean', 'mfcc_6_mean', 'chroma_stft_5_mean', 'spectral_flatness_mean', 'chroma_stft_4_mean', 'chroma_stft_12_mean', 'mfcc_6_std', 'mfcc_5_std', 'spectral_contrast_mean', 'mfcc_4_std', 'mfcc_9_mean', 'zero_cross_rate_mean', 'mfcc_7_std', 'mfcc_12_mean', 'mfcc_7_mean', 'spectral_bandwidth_var', 'mfcc_3_std', 'mfcc_3_mean']
+
+#Features variance N=10, 13 features
+cols = ['mfcc_1_mean', 'spectral_bandwidth_mean', 'spectral_centroid_var', 'spectral_rolloff_mean', 'spectral_centroid_mean', 'zero_cross_rate_std', 'mfcc_4_mean', 'rmse_var', 'mfcc_2_mean', 'spectral_flatness_var', 'spectral_rolloff_var', 'rmse_mean', 'spectral_contrast_var']
+
+# Feature variance N=20
+cols = ['mfcc_1_mean', 'spectral_bandwidth_mean', 'spectral_centroid_var', 'spectral_rolloff_mean', 'spectral_centroid_mean', 'zero_cross_rate_std', 'mfcc_4_mean', 'rmse_var', 'mfcc_2_mean', 'spectral_flatness_var', 'spectral_rolloff_var', 'rmse_mean', 'spectral_contrast_var', 'chroma_stft_2_mean', 'chroma_stft_7_mean', 'chroma_stft_9_mean', 'mfcc_8_mean', 'mfcc_6_mean', 'chroma_stft_5_mean', 'spectral_flatness_mean', 'mfcc_4_std', 'mfcc_5_std', 'mfcc_6_std', 'spectral_contrast_mean', 'mfcc_9_mean', 'mfcc_7_std']
+
 train_features_5,train_labels_5,test_features_5,test_labels_5 = readfromtabcsv("Music files/GenreClassData_"+"5s"+".txt",cols)
 train_features_10,train_labels_10,test_features_10,test_labels_10 = readfromtabcsv("Music files/GenreClassData_"+"10s"+".txt",cols)
 train_features_30,train_labels_30,test_features_30,test_labels_30 = readfromtabcsv("Music files/GenreClassData_"+"30s"+".txt",cols)
@@ -130,6 +139,9 @@ test_vars_10 = np.var(test_features_10,axis=1)
 
 train_vars_5 = np.var(train_features_5, axis=1)
 test_vars_5 = np.var(test_features_5,axis=1)
+
+train_combined = np.concatenate([train_features_30, train_vars_10, train_vars_5], axis=1)
+test_combined = np.concatenate([test_features_30, test_vars_10, test_vars_5], axis=1)
 
 train_combined = np.concatenate([train_features_30, train_vars_10, train_vars_5], axis=1)
 test_combined = np.concatenate([test_features_30, test_vars_10, test_vars_5], axis=1)
