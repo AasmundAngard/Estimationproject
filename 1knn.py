@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from collections import Counter
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay
@@ -11,8 +10,11 @@ from datautilities import readfromtabcsv
 k = 5
 
 
-# Modellen skal trenes på parameterne spectral_rolloff_mean (index 10), mfcc_1_mean (index 41)
-# spectral_centroid_mean (index 6), tempo (index 40) GenreID (index 65)
+# Modellen skal bruke 30s klipp, og trenes på parameterne 
+# spectral_rolloff_mean (index 10), 
+# mfcc_1_mean (index 41)
+# spectral_centroid_mean (index 6), 
+# tempo (index 40) 
 
 
 cols = [
@@ -22,20 +24,24 @@ cols = [
     "tempo",
     # "spectral_rolloff_var", # Det beste for å bytte ut tempo
     # "rmse_var", # Det beste istedenfor tempo om akser normaliseres
-    "Genre",
-    "Type"
 ]
 
 train_features,train_labels,test_features,test_labels = readfromtabcsv("Music files/GenreClassData_30s.txt",cols)
 
-genres = np.unique(train_labels)
+# Normaliser punkter
+print(train_features.shape)
+mean = np.mean(train_features,axis=0)
+std = np.sqrt(np.var(train_features,axis=0))
+train_features = (train_features-mean)/std
+test_features = (test_features-mean)/std
 
+# For verifikasjon av modell
+genres = np.unique(train_labels)
 genre_to_index = {genres[i]: i for i in range(len(genres))}
 confusion_matrix = np.zeros((len(genres),len(genres)))
 correct_per_genre = {g: 0 for g in genres}
 total_per_genre = {g: 0 for g in genres}
 correctly_classified = 0
-
 
 for test_feature,true_label in zip(test_features,test_labels):
 
@@ -90,9 +96,9 @@ disp = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix,
                             display_labels=genres,
                             # cmap=plt.cm.Blues
                             )
-# disp.plot()
-disp.plot(cmap="Blues")
+disp.plot()
+# disp.plot(cmap="Blues")
 plt.xticks(rotation=45, ha="right")  # rotate x-axis labels
 plt.title("Confusion matrix kNN classification, k=5")
 plt.tight_layout()
-plt.savefig("plots/testknnconfusion")
+plt.savefig("plots/1knnconfusioncolor")

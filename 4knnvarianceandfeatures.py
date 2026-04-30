@@ -78,8 +78,16 @@ datatypes = ['zero_cross_rate_mean', 'zero_cross_rate_std', 'rmse_mean',
               'mfcc_11_std', 'mfcc_12_std'
               ]
 
+cols = [
+    "spectral_rolloff_mean",
+    "spectral_centroid_mean",
+    "mfcc_1_mean",
+    # "tempo"
+     "rmse_var",
+]
 
-train_features,train_labels,test_features,test_labels = readfromtabcsv("Music files/GenreClassData_"+"5s"+".txt",cols)
+train_features_5,train_labels_5,test_features_5,test_labels_5 = readfromtabcsv("Music files/GenreClassData_"+"5s"+".txt",cols)
+train_features_10,train_labels_10,test_features_10,test_labels_10 = readfromtabcsv("Music files/GenreClassData_"+"10s"+".txt",cols)
 train_features_30,train_labels_30,test_features_30,test_labels_30 = readfromtabcsv("Music files/GenreClassData_"+"30s"+".txt",cols)
 
 #Z score normalize axes
@@ -89,26 +97,44 @@ train_features_30 = (train_features_30-mean)/std
 test_features_30 = (test_features_30-mean)/std
 
 #Z score normalize axes
-mean = np.mean(train_features,axis=0)
-std = np.sqrt(np.var(train_features,axis=0))
-train_features = (train_features-mean)/std
-test_features = (test_features-mean)/std
+mean = np.mean(train_features_10,axis=0)
+std = np.sqrt(np.var(train_features_10,axis=0))
+train_features_10 = (train_features_10-mean)/std
+test_features_10 = (test_features_10-mean)/std
 
-genres = np.unique(train_labels)
+#Z score normalize axes
+mean = np.mean(train_features_5,axis=0)
+std = np.sqrt(np.var(train_features_5,axis=0))
+train_features_5 = (train_features_5-mean)/std
+test_features_5 = (test_features_5-mean)/std
 
-train_features = train_features.reshape(-1, 6, train_features.shape[1])
-test_features = test_features.reshape(-1, 6, test_features.shape[1])
+genres = np.unique(train_labels_5)
 
-train_labels = train_labels.reshape(-1,6)[:, 0]
-test_labels = test_labels.reshape(-1,6)[:, 0]
+# Split into one matrix for each song (every 3 contigous clips together)
+train_features_10 = train_features_10.reshape(-1, 3, train_features_10.shape[1])
+test_features_10 = test_features_10.reshape(-1, 3, test_features_10.shape[1])
 
+train_labels_10 = train_labels_10.reshape(-1,3)[:, 0]
+test_labels_10 = test_labels_10.reshape(-1,3)[:, 0]
 
-train_vars = np.var(train_features, axis=1)
-test_vars = np.var(test_features,axis=1)
+# Split into one matrix for each song (every 6 contigous clips together)
+train_features_5 = train_features_5.reshape(-1, 6, train_features_5.shape[1])
+test_features_5 = test_features_5.reshape(-1, 6, test_features_5.shape[1])
 
-train_combined = np.concatenate([train_features_30, train_vars], axis=1)
-test_combined = np.concatenate([test_features_30, test_vars], axis=1)
+train_labels_5 = train_labels_5.reshape(-1,6)[:, 0]
+test_labels_5 = test_labels_5.reshape(-1,6)[:, 0]
 
+# Calculate variance across clips for every song
+train_vars_10 = np.var(train_features_10, axis=1)
+test_vars_10 = np.var(test_features_10,axis=1)
+
+train_vars_5 = np.var(train_features_5, axis=1)
+test_vars_5 = np.var(test_features_5,axis=1)
+
+train_combined = np.concatenate([train_features_30, train_vars_10, train_vars_5], axis=1)
+test_combined = np.concatenate([test_features_30, test_vars_10, test_vars_5], axis=1)
+
+print(train_combined)
 
 genre_to_index = {genres[i]: i for i in range(len(genres))}
 confusion_matrix = np.zeros((len(genres),len(genres)))
@@ -118,10 +144,9 @@ correctly_classified = 0
 
 correct = 0
 total = 0
-print(test_vars.shape,test_labels.shape)
-for test_var,true_label in zip(test_combined,test_labels):
+for test_var,true_label in zip(test_combined,test_labels_30):
     
-    majority_class = find_nearest(train_combined,train_labels,test_var)
+    majority_class = find_nearest(train_combined,train_labels_30,test_var)
     print(true_label,majority_class)
     if majority_class == true_label:
         correct += 1
@@ -177,4 +202,4 @@ disp.plot(cmap="Blues")
 plt.xticks(rotation=45, ha="right")  # rotate x-axis labels
 plt.title("Confusion matrix kNN classification, k="+str(k))
 plt.tight_layout()
-plt.savefig("plots/selectfeatvar5feat30",bbox_inches="tight")
+plt.savefig("plots/selectfeatvar5var10feat30",bbox_inches="tight")

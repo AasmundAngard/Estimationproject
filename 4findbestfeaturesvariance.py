@@ -50,16 +50,16 @@ df = pd.read_csv("Music files/GenreClassData_5s.txt", sep="\t")
 features_5 = df[df["Type"]=="Train"][["Genre"]+datatypes]
 
 
-features_10_1 = df.iloc[0::3].reset_index(drop=True)
-features_10_2 = df.iloc[1::3].reset_index(drop=True)
-features_10_3 = df.iloc[2::3].reset_index(drop=True)
+features_10_1 = features_10.iloc[0::3].reset_index(drop=True)
+features_10_2 = features_10.iloc[1::3].reset_index(drop=True)
+features_10_3 = features_10.iloc[2::3].reset_index(drop=True)
 
-features_5_1 = df.iloc[0::6].reset_index(drop=True)
-features_5_2 = df.iloc[1::6].reset_index(drop=True)
-features_5_3 = df.iloc[2::6].reset_index(drop=True)
-features_5_4 = df.iloc[3::6].reset_index(drop=True)
-features_5_5 = df.iloc[4::6].reset_index(drop=True)
-features_5_6 = df.iloc[5::6].reset_index(drop=True)
+features_5_1 = features_5.iloc[0::6].reset_index(drop=True)
+features_5_2 = features_5.iloc[1::6].reset_index(drop=True)
+features_5_3 = features_5.iloc[2::6].reset_index(drop=True)
+features_5_4 = features_5.iloc[3::6].reset_index(drop=True)
+features_5_5 = features_5.iloc[4::6].reset_index(drop=True)
+features_5_6 = features_5.iloc[5::6].reset_index(drop=True)
 
 
 # Calculate the genre means for each feature
@@ -122,4 +122,50 @@ variance_relation_5_6 = variance_between_classes_5_6 / variance_within_class_5_6
 
 # Find features with highest relation
 
+highest = 20
+variance_relation_30 = variance_relation_30.sort_values(ascending=False).head(highest)
+print(variance_relation_30)
+
+variance_relation_10_1 = variance_relation_10_1.sort_values(ascending=False).head(highest)
+variance_relation_10_2 = variance_relation_10_2.sort_values(ascending=False).head(highest)
+variance_relation_10_3 = variance_relation_10_3.sort_values(ascending=False).head(highest)
+print(variance_relation_10_1)
+print(variance_relation_10_2)
+print(variance_relation_10_3)
+
+variance_relation_5_1 = variance_relation_5_1.sort_values(ascending=False).head(highest)
+variance_relation_5_2 = variance_relation_5_2.sort_values(ascending=False).head(highest)
+variance_relation_5_3 = variance_relation_5_3.sort_values(ascending=False).head(highest)
+variance_relation_5_4 = variance_relation_5_4.sort_values(ascending=False).head(highest)
+variance_relation_5_5 = variance_relation_5_5.sort_values(ascending=False).head(highest)
+variance_relation_5_6 = variance_relation_5_6.sort_values(ascending=False).head(highest)
+print(variance_relation_5_1)
+print(variance_relation_5_2)
+print(variance_relation_5_3)
+print(variance_relation_5_4)
+print(variance_relation_5_5)
+print(variance_relation_5_6)
+
+# Start med en feature, og finn korrelasjon itl alle andre
+feature_scores = pd.concat([
+    variance_relation_30.rename("30"),
+    variance_relation_10_1.rename("10_1"),
+    variance_relation_10_2.rename("10_2"),
+    variance_relation_10_3.rename("10_3"),
+    variance_relation_5_1.rename("5_1"),
+    variance_relation_5_2.rename("5_2"),
+    variance_relation_5_3.rename("5_3"),
+    variance_relation_5_4.rename("5_4"),
+    variance_relation_5_5.rename("5_5"),
+    variance_relation_5_6.rename("5_6")
+], axis=1)
+
+print(feature_scores)
+
+best_columns = feature_scores.idxmax(axis=1)
+print(best_columns)
+formatted_list = [
+    str(feature)+"_"+str(col) for feature, col in best_columns.items()
+]
+print(formatted_list)
 
